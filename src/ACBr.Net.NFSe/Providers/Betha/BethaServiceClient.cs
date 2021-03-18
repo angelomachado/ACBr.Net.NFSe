@@ -1,9 +1,9 @@
 ﻿// ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 05-22-2018
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 05-22-2018
 // ***********************************************************************
 // <copyright file="BethaServiceClient.cs" company="ACBr.Net">
@@ -31,10 +31,13 @@
 
 using System;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
+using ACBr.Net.Core.Extensions;
+using ACBr.Net.DFe.Core;
 
 namespace ACBr.Net.NFSe.Providers
 {
-    internal sealed class BethaServiceClient : NFSeRequestServiceClient, IABRASFClient
+    internal sealed class BethaServiceClient : NFSeSOAP11ServiceClient, IServiceClient
     {
         #region Constructors
 
@@ -50,39 +53,68 @@ namespace ACBr.Net.NFSe.Providers
 
         #region Methods
 
-        public string RecepcionarLoteRps(string cabec, string msg)
+        public string Enviar(string cabec, string msg)
         {
-            return Execute("", msg);
+            return Execute(msg.Replace("EnviarLoteRpsEnvio", "e:EnviarLoteRpsEnvio"));
         }
 
-        public string ConsultarSituacaoLoteRps(string cabec, string msg)
+        public string EnviarSincrono(string cabec, string msg)
         {
-            return Execute("", msg);
+            throw new NotImplementedException();
         }
 
-        public string ConsultarNFSePorRps(string cabec, string msg)
+        public string ConsultarSituacao(string cabec, string msg)
         {
-            return Execute("", msg);
-        }
-
-        public string ConsultarNFSe(string cabec, string msg)
-        {
-            return Execute("", msg);
+            return Execute(msg.Replace("ConsultarSituacaoLoteRpsEnvio", "e:ConsultarSituacaoLoteRpsEnvio"));
         }
 
         public string ConsultarLoteRps(string cabec, string msg)
         {
-            return Execute("", msg);
+            return Execute(msg.Replace("ConsultarLoteRpsEnvio", "e:ConsultarLoteRpsEnvio"));
+        }
+
+        public string ConsultarSequencialRps(string cabec, string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ConsultarNFSeRps(string cabec, string msg)
+        {
+            return Execute(msg.Replace("ConsultarNfsePorRpsEnvio", "e:ConsultarNfsePorRpsEnvio"));
+        }
+
+        public string ConsultarNFSe(string cabec, string msg)
+        {
+            return Execute(msg.Replace("ConsultarNfseEnvio", "e:ConsultarNfseEnvio"));
         }
 
         public string CancelarNFSe(string cabec, string msg)
         {
-            return Execute("", msg);
+            return Execute(msg.Replace("CancelarNfseEnvio", "e:CancelarNfseEnvio"));
         }
 
-        public string GerarNfse(string cabec, string msg)
+        public string CancelarNFSeLote(string cabec, string msg)
         {
             throw new NotImplementedException();
+        }
+
+        public string SubstituirNFSe(string cabec, string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string Execute(string message)
+        {
+            return Execute("", message, "", "", "xmlns:e=\"http://www.betha.com.br/e-nota-contribuinte-ws\"");
+        }
+
+        protected override string TratarRetorno(XDocument xmlDocument, string[] responseTag)
+        {
+            var element = xmlDocument.ElementAnyNs("Fault");
+            if (element == null) return xmlDocument.ToString();
+
+            var exMessage = $"{element.ElementAnyNs("faultcode").GetValue<string>()} - {element.ElementAnyNs("faultstring").GetValue<string>()}";
+            throw new ACBrDFeCommunicationException(exMessage);
         }
 
         #endregion Methods

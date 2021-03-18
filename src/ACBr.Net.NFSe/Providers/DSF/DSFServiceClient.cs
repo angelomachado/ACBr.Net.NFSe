@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 10-08-2014
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 07-11-2018
 // ***********************************************************************
 // <copyright file="DSFServiceClient.cs" company="ACBr.Net">
@@ -29,9 +29,15 @@
 // <summary></summary>
 // ***********************************************************************
 
-namespace ACBr.Net.NFSe.Providers.DSF
+using System;
+using System.Text;
+using System.Xml.Linq;
+using ACBr.Net.Core.Extensions;
+using ACBr.Net.DFe.Core.Common;
+
+namespace ACBr.Net.NFSe.Providers
 {
-    internal sealed class DSFServiceClient : NFSeServiceClient<IDSFService>, IDSFService
+    internal sealed class DSFServiceClient : NFSeSOAP11ServiceClient, IServiceClient
     {
         #region Constructor
 
@@ -43,128 +49,131 @@ namespace ACBr.Net.NFSe.Providers.DSF
 
         #region Methods
 
-        /// <summary>
-        /// Consultars the sequencial RPS.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string ConsultarSequencialRps(string mensagemXml)
+        public string Enviar(string cabec, string msg)
         {
-            var request = new ConsultarSequencialRpsRequest(mensagemXml);
-            var retVal = ((IDSFService)this).consultarSequencialRps(request);
-            return retVal.Return;
+            var servico = EhHomologação ? "testeEnviar" : "enviar";
+
+            var message = new StringBuilder();
+            message.Append($"<proc:{servico} soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append($"</proc:{servico}>");
+
+            var response = EhHomologação ? "testeEnviarResponse" : "enviarResponse";
+            var responseReturn = EhHomologação ? "testeEnviarReturn" : "enviarReturn";
+
+            return Execute(message.ToString(), response, responseReturn);
         }
 
-        /// <summary>
-        /// Enviars the sincrono.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string EnviarSincrono(string mensagemXml)
+        public string EnviarSincrono(string cabec, string msg)
         {
-            var request = new EnviarSincronoRequest(mensagemXml);
-            var retVal = ((IDSFService)this).enviarSincrono(request);
-            return retVal.Return;
+            if (EhHomologação) throw new NotImplementedException();
+
+            var message = new StringBuilder();
+            message.Append("<proc:enviarSincrono soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append("</proc:enviarSincrono>");
+
+            return Execute(message.ToString(), "enviarSincronoResponse", "enviarSincronoReturn");
         }
 
-        /// <summary>
-        /// Enviars the specified mensagem XML.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string Enviar(string mensagemXml)
+        public string ConsultarSituacao(string cabec, string msg)
         {
-            var request = new EnviarRequest(mensagemXml);
-            var retVal = ((IDSFService)this).enviar(request);
-            return retVal.Return;
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Consultars the lote.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string ConsultarLote(string mensagemXml)
+        public string ConsultarLoteRps(string cabec, string msg)
         {
-            var request = new ConsultarLoteRequest(mensagemXml);
-            var retVal = ((IDSFService)this).consultarLote(request);
-            return retVal.Return;
+            if (EhHomologação) throw new NotImplementedException();
+
+            var message = new StringBuilder();
+            message.Append("<proc:consultarLote soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append("</proc:consultarLote>");
+
+            return Execute(message.ToString(), "consultarLoteResponse", "consultarLoteReturn");
         }
 
-        /// <summary>
-        /// Consultars the nota.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string ConsultarNFSe(string mensagemXml)
+        public string ConsultarSequencialRps(string cabec, string msg)
         {
-            var request = new ConsultarNotaRequest(mensagemXml);
-            var retVal = ((IDSFService)this).consultarNota(request);
-            return retVal.Return;
+            if (EhHomologação) throw new NotImplementedException();
+
+            var message = new StringBuilder();
+            message.Append("<proc:consultarSequencialRps soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append("</proc:consultarSequencialRps>");
+
+            return Execute(message.ToString(), "consultarSequencialRpsResponse", "consultarSequencialRpsReturn");
         }
 
-        /// <summary>
-        /// Cancelars the specified mensagem XML.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string Cancelar(string mensagemXml)
+        public string ConsultarNFSeRps(string cabec, string msg)
         {
-            var request = new CancelarRequest(mensagemXml);
-            var retVal = ((IDSFService)this).cancelar(request);
-            return retVal.Return;
+            if (EhHomologação) throw new NotImplementedException();
+
+            var message = new StringBuilder();
+            message.Append("<proc:consultarNFSeRps soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append("</proc:consultarNFSeRps>");
+
+            return Execute(message.ToString(), "consultarNFSeRpsResponse", "consultarNFSeRpsReturn");
         }
 
-        /// <summary>
-        /// Consultars the nf se RPS.
-        /// </summary>
-        /// <param name="mensagemXml">The mensagem XML.</param>
-        /// <returns>System.String.</returns>
-        public string ConsultarNFSeRps(string mensagemXml)
+        public string ConsultarNFSe(string cabec, string msg)
         {
-            var request = new ConsultarNFSeRpsRequest(mensagemXml);
-            var retVal = ((IDSFService)this).consultarNFSeRps(request);
-            return retVal.Return;
+            if (EhHomologação) throw new NotImplementedException();
+
+            var message = new StringBuilder();
+            message.Append("<proc:consultarNota soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append("</proc:consultarNota>");
+
+            return Execute(message.ToString(), "consultarNotaResponse", "consultarNotaReturn");
         }
 
-        #region Interface Methods
-
-        ConsultarSequencialRpsResponse IDSFService.consultarSequencialRps(ConsultarSequencialRpsRequest request)
+        public string CancelarNFSe(string cabec, string msg)
         {
-            return Channel.consultarSequencialRps(request);
+            if (EhHomologação) throw new NotImplementedException();
+
+            var message = new StringBuilder();
+            message.Append("<proc:cancelar soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+            message.Append("<mensagemXml xsi:type=\"xsd:string\">");
+            message.AppendEnvio(msg);
+            message.Append("</mensagemXml>");
+            message.Append("</proc:cancelar>");
+
+            return Execute(message.ToString(), "cancelarResponse", "cancelarReturn");
         }
 
-        EnviarSincronoResponse IDSFService.enviarSincrono(EnviarSincronoRequest request)
+        public string CancelarNFSeLote(string cabec, string msg)
         {
-            return Channel.enviarSincrono(request);
+            throw new NotImplementedException();
         }
 
-        EnviarResponse IDSFService.enviar(EnviarRequest request)
+        public string SubstituirNFSe(string cabec, string msg)
         {
-            return Channel.enviar(request);
+            throw new NotImplementedException();
         }
 
-        ConsultarLoteResponse IDSFService.consultarLote(ConsultarLoteRequest request)
+        private string Execute(string message, params string[] reponseTags)
         {
-            return Channel.consultarLote(request);
+            return Execute("", message, reponseTags, "xmlns:proc=\"http://proces.wsnfe2.dsfnet.com.br\"");
         }
 
-        ConsultarNotaResponse IDSFService.consultarNota(ConsultarNotaRequest request)
+        protected override string TratarRetorno(XDocument xmlDocument, string[] responseTag)
         {
-            return Channel.consultarNota(request);
+            return xmlDocument.ElementAnyNs(responseTag[0]).ElementAnyNs(responseTag[1]).Value;
         }
-
-        CancelarResponse IDSFService.cancelar(CancelarRequest request)
-        {
-            return Channel.cancelar(request);
-        }
-
-        ConsultarNFSeRpsResponse IDSFService.consultarNFSeRps(ConsultarNFSeRpsRequest request)
-        {
-            return Channel.consultarNFSeRps(request);
-        }
-
-        #endregion Interface Methods
 
         #endregion Methods
     }

@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 07-30-2017
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 07-30-2017
 // ***********************************************************************
 // <copyright file="NFSeProvider.cs" company="ACBr.Net">
@@ -42,40 +42,50 @@ namespace ACBr.Net.NFSe.Providers
         [Description("Betha v2")]
         Betha2 = 2,
 
+        BHISS = 8,
+
         Coplan = 3,
 
+        DBSeller = 19,
+
         DSF = 4,
+
+        Equiplano = 15,
+
+        Fiorilli = 16,
 
         FissLex = 12,
 
         Ginfes = 5,
 
-        GovDigital = 6,
+        ISSNet = 18,
+
+        [Description("NFe Cidades")]
+        NFeCidades = 6,
 
         [Description("Nota Carioca")]
         NotaCarioca = 7,
 
-        [Description("Porto Alegre")]
-        PortoAlegre = 8,
+        [Description("Pronim v2")]
+        Pronim2 = 17,
 
         [Description("São Paulo")]
         SaoPaulo = 9,
+
+        [Description("SmarAPD ABRASF")]
+        SmarAPDABRASF = 14,
+
+        [Description("Vitoria")]
+        Vitoria = 13,
 
         WebIss = 10,
 
         [Description("WebIss v2")]
         WebIss2 = 11,
 
-        [Description("Belo Horizonte")]
-        BeloHorizonte = 13,
+        Sigiss = 20,
 
-        [Description("Vitoria")]
-        Vitoria = 14,
-
-        [Description("SmarAPD ABRASF")]
-        SmarAPDABRASF = 15,
-
-        [Description("Equiplano")]
-        Equiplano = 16
+        [Description("CONAM")]
+        Conam = 21
     }
 }

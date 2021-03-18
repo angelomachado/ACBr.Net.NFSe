@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 12-24-2017
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 07-11-2018
 // ***********************************************************************
 // <copyright file="ProviderWebIss2.cs" company="ACBr.Net">
@@ -31,10 +31,10 @@
 
 using ACBr.Net.NFSe.Configuracao;
 
-namespace ACBr.Net.NFSe.Providers.WebISS2
+namespace ACBr.Net.NFSe.Providers
 {
     // ReSharper disable once InconsistentNaming
-    internal sealed class ProviderWebIss2 : ProviderABRASF2
+    internal sealed class ProviderWebIss2 : ProviderABRASF202
     {
         #region Constructors
 
@@ -47,19 +47,9 @@ namespace ACBr.Net.NFSe.Providers.WebISS2
 
         #region Methods
 
-        protected override IABRASF2Client GetClient(TipoUrl tipo)
+        protected override IServiceClient GetClient(TipoUrl tipo)
         {
             return new WebIss2ServiceClient(this, tipo);
-        }
-
-        protected override string GetNamespace()
-        {
-            return "xmlns=\"http://www.abrasf.org.br/nfse.xsd\"";
-        }
-
-        protected override string GetSchema(TipoUrl tipo)
-        {
-            return "nfse v2 02.xsd";
         }
 
         #endregion Methods

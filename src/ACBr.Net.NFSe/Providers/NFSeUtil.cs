@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe.Shared
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 06-02-2018
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 06-02-2018
 // ***********************************************************************
 // <copyright file="NFSeUtil.cs" company="ACBr.Net">
@@ -30,6 +30,8 @@
 // ***********************************************************************
 
 using System;
+using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using ACBr.Net.Core.Extensions;
 
@@ -46,6 +48,15 @@ namespace ACBr.Net.NFSe.Providers
 
         #region Methods
 
+        public static void ApplyNamespace(XElement parent, XNamespace nameSpace, params string[] excludeElements)
+        {
+            if (!excludeElements.Contains(parent.Name.LocalName))
+                parent.Name = nameSpace + parent.Name.LocalName;
+
+            foreach (var child in parent.Elements())
+                ApplyNamespace(child, nameSpace, excludeElements);
+        }
+
         public static string RemoverDeclaracaoXml(this string xml)
         {
             if (xml.IsEmpty()) return xml;
@@ -57,13 +68,31 @@ namespace ACBr.Net.NFSe.Providers
             return posFinal < 0 ? xml : xml.Remove(posIni, (posFinal + 2) - posIni);
         }
 
-        public static string AjustarEnvio(this string envio)
+        public static StringBuilder AppendEnvio(this StringBuilder sb, string dados)
         {
             for (var i = 0; i < escapedCharacters.Length; i++)
             {
-                envio = envio.Replace(unescapedCharacters[i], escapedCharacters[i]);
+                dados = dados.Replace(unescapedCharacters[i], escapedCharacters[i]);
             }
-            return envio;
+
+            sb.Append(dados);
+            return sb;
+        }
+
+        public static StringBuilder AppendCData(this StringBuilder sb, string dados)
+        {
+            sb.Append($"<![CDATA[{dados}]]>");
+            return sb;
+        }
+
+        public static string AjustarString(this string dados)
+        {
+            for (var i = 0; i < escapedCharacters.Length; i++)
+            {
+                dados = dados.Replace(unescapedCharacters[i], escapedCharacters[i]);
+            }
+
+            return dados;
         }
 
         public static string GetCPF_CNPJ(this XElement element)
@@ -71,6 +100,19 @@ namespace ACBr.Net.NFSe.Providers
             if (element == null) return string.Empty;
 
             return (element.ElementAnyNs("Cnpj")?.GetValue<string>() ?? element.ElementAnyNs("Cpf")?.GetValue<string>()) ?? string.Empty;
+        }
+
+        public static bool IsValidXml(this string xmlstring)
+        {
+            try
+            {
+                var xDocument = XDocument.Parse(xmlstring);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         #endregion Methods

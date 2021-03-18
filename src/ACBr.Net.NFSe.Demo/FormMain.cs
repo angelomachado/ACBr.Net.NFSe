@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ACBr.Net.NFSe.DANFSe.FastReport;
 
 namespace ACBr.Net.NFSe.Demo
 {
@@ -30,7 +31,13 @@ namespace ACBr.Net.NFSe.Demo
         public FormMain()
         {
             InitializeComponent();
-            acbrNFSe = new ACBrNFSe();
+            acbrNFSe = new ACBrNFSe
+            {
+                DANFSe = new DANFSeFastReport()
+            };
+
+            ((DANFSeFastReport)acbrNFSe.DANFSe).OnExport += (sender, args) => args.Export.ShowDialog();
+
             config = ACBrConfig.CreateOrLoad(Path.Combine(Application.StartupPath, "nfse.config"));
         }
 
@@ -104,7 +111,7 @@ namespace ACBr.Net.NFSe.Demo
         {
             ExecuteSafe(() =>
             {
-                var numero = "10";
+                var numero = 10;
                 if (InputBox.Show("Numero da RPS", "Digite o numero da RPS.", ref numero).Equals(DialogResult.Cancel)) return;
 
                 var serie = "0";
@@ -121,7 +128,7 @@ namespace ACBr.Net.NFSe.Demo
         {
             ExecuteSafe(() =>
             {
-                var ret = acbrNFSe.ConsultaNFSe(DateTime.Today.AddDays(-7), DateTime.Today);
+                var ret = acbrNFSe.ConsultaNFSePeriodo(DateTime.Today.AddDays(-7), DateTime.Today);
                 wbbDados.LoadXml(ret.XmlEnvio);
                 wbbResposta.LoadXml(ret.XmlRetorno);
                 wbbRetorno.LoadXml(ret.EnvelopeRetorno);
@@ -141,7 +148,7 @@ namespace ACBr.Net.NFSe.Demo
                 var motivo = "";
                 if (InputBox.Show("Motivo Cancelamento", "Digite o motivo do cancelamento.", ref motivo).Equals(DialogResult.Cancel)) return;
 
-                var ret = acbrNFSe.CancelaNFSe(codigo, serie, motivo);
+                var ret = acbrNFSe.CancelarNFSe(codigo, serie, motivo);
                 wbbDados.LoadXml(ret.XmlEnvio);
                 wbbResposta.LoadXml(ret.XmlRetorno);
                 wbbRetorno.LoadXml(ret.EnvelopeRetorno);
@@ -157,7 +164,7 @@ namespace ACBr.Net.NFSe.Demo
                 var numero = 1;
                 if (InputBox.Show("Numero Lote", "Digite o numero do lote.", ref numero).Equals(DialogResult.Cancel)) return;
 
-                var ret = acbrNFSe.Enviar(numero, sincrono: true);
+                var ret = acbrNFSe.Enviar(numero, true);
                 wbbDados.LoadXml(ret.XmlEnvio);
                 wbbResposta.LoadXml(ret.XmlRetorno);
                 wbbRetorno.LoadXml(ret.EnvelopeRetorno);
@@ -263,6 +270,15 @@ namespace ACBr.Net.NFSe.Demo
                 var file = Helpers.OpenFile("Certificate Files (*.pfx)|*.pfx|All Files (*.*)|*.*", "Selecione o certificado");
                 txtCertificado.Text = file;
             });
+        }
+
+        private void btnImprimirDANFSe_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            ((DANFSeFastReport)acbrNFSe.DANFSe).ShowDesign();
+#else
+            acbrNFSe.Imprimir();
+#endif
         }
 
         private void lstMunicipios_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -426,18 +442,18 @@ namespace ACBr.Net.NFSe.Demo
             var municipio = cmbCidades.GetSelectedValue<ACBrMunicipioNFSe>();
             if (municipio == null) return;
 
-            acbrNFSe.NotasFiscais.Clear();
-            var nfSe = acbrNFSe.NotasFiscais.AddNew();
+            acbrNFSe.NotasServico.Clear();
+            var nfSe = acbrNFSe.NotasServico.AddNew();
             nfSe.IdentificacaoRps.Numero = "1";
             nfSe.IdentificacaoRps.Serie = "1";
             nfSe.IdentificacaoRps.Tipo = TipoRps.RPS;
             nfSe.IdentificacaoRps.DataEmissao = DateTime.Now;
             nfSe.Situacao = SituacaoNFSeRps.Normal;
-            nfSe.NaturezaOperacao = NaturezaOperacao.NT01;
+            nfSe.NaturezaOperacao = NaturezaOperacao.ABRASF.TributacaoNoMunicipio;
             nfSe.RegimeEspecialTributacao = RegimeEspecialTributacao.SimplesNacional;
             nfSe.IncentivadorCultural = NFSeSimNao.Nao;
 
-            nfSe.Servico.ItemListaServico = "107";
+            nfSe.Servico.ItemListaServico = "01.07";
             nfSe.Servico.CodigoTributacaoMunicipio = "01.07.00 / 00010700";
             nfSe.Servico.CodigoCnae = "";
             nfSe.Servico.CodigoMunicipio = municipio.Codigo;

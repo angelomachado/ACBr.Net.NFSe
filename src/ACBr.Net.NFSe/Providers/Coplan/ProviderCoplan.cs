@@ -1,9 +1,9 @@
 ﻿// ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 05-16-2018
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 07-11-2018
 // ***********************************************************************
 // <copyright file="ProviderCoplan.cs" company="ACBr.Net">
@@ -29,11 +29,13 @@
 // <summary></summary>
 // ***********************************************************************
 
+using ACBr.Net.Core.Extensions;
+using ACBr.Net.DFe.Core.Common;
 using ACBr.Net.NFSe.Configuracao;
 
-namespace ACBr.Net.NFSe.Providers.Coplan
+namespace ACBr.Net.NFSe.Providers
 {
-    internal sealed class ProviderCoplan : ProviderABRASF2
+    internal sealed class ProviderCoplan : ProviderABRASF201
     {
         #region Constructors
 
@@ -48,29 +50,10 @@ namespace ACBr.Net.NFSe.Providers.Coplan
 
         #region Protected Methods
 
-        protected override IABRASF2Client GetClient(TipoUrl tipo)
+        protected override IServiceClient GetClient(TipoUrl tipo)
         {
-            return new CoplanServiceClient(this, tipo);
-        }
-
-        protected override string GetSchema(TipoUrl tipo)
-        {
-            return "nfse.xsd";
-        }
-
-        protected override string GetVersao()
-        {
-            return "versao=\"2.01\"";
-        }
-
-        protected override string GetNamespace()
-        {
-            return "xmlns=\"http://www.abrasf.org.br/nfse.xsd\"";
-        }
-
-        protected override string GerarCabecalho()
-        {
-            return $"<cabecalho versao=\"2.01\" xmlns=\"http://www.abrasf.org.br/nfse.xsd\"><versaoDados>2.01</versaoDados></cabecalho>";
+            return Municipio.Codigo.IsIn(5107602) && Configuracoes.WebServices.Ambiente == DFeTipoAmbiente.Producao ?
+                   new CoplanServiceClient(this, tipo, null) : new CoplanServiceClient(this, tipo);
         }
 
         #endregion Protected Methods

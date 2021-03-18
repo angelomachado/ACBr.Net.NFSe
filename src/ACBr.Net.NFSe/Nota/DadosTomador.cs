@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 10-01-2014
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 23-01-2020
 // ***********************************************************************
 // <copyright file="DadosTomador.cs" company="ACBr.Net">
@@ -70,6 +70,8 @@ namespace ACBr.Net.NFSe.Nota
         public EnderecoExterior EnderecoExterior { get; }
 
         public DadosContato DadosContato { get; }
+
+        public int Tipo { get; set; } //Utilize a classe TipoTomador
 
         #endregion Propriedades
     }

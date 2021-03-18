@@ -1,9 +1,9 @@
 ﻿// ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 07-28-2017
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 07-28-2017
 // ***********************************************************************
 // <copyright file="ProviderBetha2.cs" company="ACBr.Net">
@@ -33,7 +33,7 @@ using ACBr.Net.NFSe.Configuracao;
 
 namespace ACBr.Net.NFSe.Providers
 {
-    internal sealed class ProviderBetha2 : ProviderABRASF2
+    internal sealed class ProviderBetha2 : ProviderABRASF202
     {
         #region Constructors
 
@@ -48,7 +48,7 @@ namespace ACBr.Net.NFSe.Providers
 
         #region Protected Methods
 
-        protected override IABRASF2Client GetClient(TipoUrl tipo)
+        protected override IServiceClient GetClient(TipoUrl tipo)
         {
             return new Betha2ServiceClient(this, tipo);
         }
@@ -61,11 +61,6 @@ namespace ACBr.Net.NFSe.Providers
         protected override string GetNamespace()
         {
             return "xmlns=\"http://www.betha.com.br/e-nota-contribuinte-ws\"";
-        }
-
-        protected override string GerarCabecalho()
-        {
-            return $"<cabecalho versao=\"2.02\" xmlns=\"http://www.betha.com.br/e-nota-contribuinte-ws\"><versaoDados>2.02</versaoDados></cabecalho>";
         }
 
         #endregion Protected Methods

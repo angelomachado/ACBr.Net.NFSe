@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 06-19-2016
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 08-03-2017
 // ***********************************************************************
 // <copyright file="ACBrMunicipioNFSe.cs" company="ACBr.Net">
@@ -71,7 +71,6 @@ namespace ACBr.Net.NFSe.Providers
         #region Methods
 
         public XmlSchema GetSchema()
-
         {
             return null;
         }
@@ -85,7 +84,6 @@ namespace ACBr.Net.NFSe.Providers
             if (wasEmpty) return;
 
             while (reader.NodeType != XmlNodeType.EndElement)
-
             {
                 reader.ReadStartElement("Item");
 

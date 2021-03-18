@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 05-26-2016
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 06-07-2016
 // ***********************************************************************
 // <copyright file="DadosPrestador.cs" company="ACBr.Net">
@@ -48,8 +48,9 @@ namespace ACBr.Net.NFSe.Nota
         {
             CpfCnpj = string.Empty;
             InscricaoMunicipal = string.Empty;
-            Senha = string.Empty;
-            FraseSecreta = string.Empty;
+            NumeroEmissorRps = string.Empty;
+            RazaoSocial = string.Empty;
+            NomeFantasia = string.Empty;
             Endereco = new Endereco();
             DadosContato = new DadosContato();
         }
@@ -62,11 +63,7 @@ namespace ACBr.Net.NFSe.Nota
 
         public string InscricaoMunicipal { get; set; }
 
-        public string Senha { get; set; }
-
-        public string FraseSecreta { get; set; }
-
-        public string ChaveAcesso { get; set; }
+        public string NumeroEmissorRps { get; set; }
 
         public string RazaoSocial { get; set; }
 

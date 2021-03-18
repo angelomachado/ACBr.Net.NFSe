@@ -1,9 +1,9 @@
 ﻿// ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 12-26-2017
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 12-26-2017
 // ***********************************************************************
 // <copyright file="ProviderAbaco.cs" company="ACBr.Net">
@@ -33,7 +33,7 @@ using System;
 using ACBr.Net.NFSe.Configuracao;
 using ACBr.Net.NFSe.Nota;
 
-namespace ACBr.Net.NFSe.Providers.Abaco
+namespace ACBr.Net.NFSe.Providers
 {
     internal sealed class ProviderAbaco : ProviderABRASF
     {
@@ -48,7 +48,7 @@ namespace ACBr.Net.NFSe.Providers.Abaco
 
         #region Methods
 
-        public override RetornoWebservice EnviarSincrono(int lote, NotaFiscalCollection notas)
+        protected override void PrepararEnviarSincrono(RetornoEnviar retornoWebservice, NotaServicoCollection notas)
         {
             throw new NotImplementedException("Função não implementada/suportada neste Provedor.");
         }
@@ -58,7 +58,7 @@ namespace ACBr.Net.NFSe.Providers.Abaco
             return string.Empty;
         }
 
-        protected override IABRASFClient GetClient(TipoUrl tipo)
+        protected override IServiceClient GetClient(TipoUrl tipo)
         {
             return new AbacoServiceClient(this, tipo);
         }

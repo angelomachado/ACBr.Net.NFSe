@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 07-11-2018
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 09-11-2018
 // ***********************************************************************
 // <copyright file="NFSeServiceClient.cs" company="ACBr.Net">
@@ -31,13 +31,20 @@
 
 using System;
 using System.IO;
+using System.Net;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.ServiceModel.Channels;
 using System.Text;
+using System.Xml.Linq;
+using ACBr.Net.Core;
+using ACBr.Net.DFe.Core;
+using ACBr.Net.DFe.Core.Common;
 using ACBr.Net.DFe.Core.Service;
 
 namespace ACBr.Net.NFSe.Providers
 {
-    public abstract class NFSeServiceClient<T> : DFeServiceClientBase<T> where T : class
+    public abstract class NFSeServiceClient : DFeServiceClientBase<IRequestChannel>
     {
         #region Fields
 
@@ -47,6 +54,22 @@ namespace ACBr.Net.NFSe.Providers
 
         #region Constructors
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="tipoUrl"></param>
+        protected NFSeServiceClient(ProviderBase provider, TipoUrl tipoUrl) : this(provider, tipoUrl, provider.Certificado)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="tipoUrl"></param>
+        /// <param name="certificado"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected NFSeServiceClient(ProviderBase provider, TipoUrl tipoUrl, X509Certificate2 certificado) :
             base(provider.GetUrl(tipoUrl), provider.TimeOut, certificado)
         {
@@ -56,48 +79,48 @@ namespace ACBr.Net.NFSe.Providers
             switch (tipoUrl)
             {
                 case TipoUrl.Enviar:
-                    ArquivoEnvio = "lot";
-                    ArquivoResposta = "lot";
+                    PrefixoEnvio = "lot";
+                    PrefixoResposta = "lot";
                     break;
 
                 case TipoUrl.EnviarSincrono:
-                    ArquivoEnvio = "lot-sinc";
-                    ArquivoResposta = "lot-sinc";
+                    PrefixoEnvio = "lot-sinc";
+                    PrefixoResposta = "lot-sinc";
                     break;
 
                 case TipoUrl.ConsultarSituacao:
-                    ArquivoEnvio = "env-sit-lot";
-                    ArquivoResposta = "rec-sit-lot";
+                    PrefixoEnvio = "env-sit-lot";
+                    PrefixoResposta = "rec-sit-lot";
                     break;
 
                 case TipoUrl.ConsultarLoteRps:
-                    ArquivoEnvio = "con-lot";
-                    ArquivoResposta = "con-lot";
+                    PrefixoEnvio = "con-lot";
+                    PrefixoResposta = "con-lot";
                     break;
 
                 case TipoUrl.ConsultarSequencialRps:
-                    ArquivoEnvio = "seq-rps";
-                    ArquivoResposta = "seq-rps";
+                    PrefixoEnvio = "seq-rps";
+                    PrefixoResposta = "seq-rps";
                     break;
 
-                case TipoUrl.ConsultaNFSeRps:
-                    ArquivoEnvio = "con-rps-nfse";
-                    ArquivoResposta = "con-rps-nfse";
+                case TipoUrl.ConsultarNFSeRps:
+                    PrefixoEnvio = "con-rps-nfse";
+                    PrefixoResposta = "con-rps-nfse";
                     break;
 
-                case TipoUrl.ConsultaNFSe:
-                    ArquivoEnvio = "con-nfse";
-                    ArquivoResposta = "con-nfse";
+                case TipoUrl.ConsultarNFSe:
+                    PrefixoEnvio = "con-nfse";
+                    PrefixoResposta = "con-nfse";
                     break;
 
-                case TipoUrl.CancelaNFSe:
-                    ArquivoEnvio = "canc-nfse";
-                    ArquivoResposta = "canc-nfse";
+                case TipoUrl.CancelarNFSe:
+                    PrefixoEnvio = "canc-nfse";
+                    PrefixoResposta = "canc-nfse";
                     break;
 
                 case TipoUrl.SubstituirNFSe:
-                    ArquivoEnvio = "sub-nfse";
-                    ArquivoResposta = "sub-nfse";
+                    PrefixoEnvio = "sub-nfse";
+                    PrefixoResposta = "sub-nfse";
                     break;
 
                 default:
@@ -105,26 +128,29 @@ namespace ACBr.Net.NFSe.Providers
             }
         }
 
-        protected NFSeServiceClient(ProviderBase provider, TipoUrl tipoUrl) :
-            this(provider, tipoUrl, provider.Certificado)
-        {
-        }
-
         #endregion Constructors
 
         #region Properties
 
+        /// <summary>
+        ///
+        /// </summary>
         public ProviderBase Provider { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public string ArquivoEnvio { get; protected set; }
+        public bool EhHomologação => Provider.Configuracoes.WebServices.Ambiente == DFeTipoAmbiente.Homologacao;
 
         /// <summary>
         ///
         /// </summary>
-        public string ArquivoResposta { get; protected set; }
+        public string PrefixoEnvio { get; protected set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public string PrefixoResposta { get; protected set; }
 
         /// <summary>
         ///
@@ -140,13 +166,75 @@ namespace ACBr.Net.NFSe.Providers
 
         #region Methods
 
+        protected virtual string Execute(string soapAction, string message, string responseTag, params string[] soapNamespaces)
+        {
+            return Execute(soapAction, message, string.Empty, new[] { responseTag }, soapNamespaces);
+        }
+
+        protected virtual string Execute(string soapAction, string message, string[] responseTag, params string[] soapNamespaces)
+        {
+            return Execute(soapAction, message, string.Empty, responseTag, soapNamespaces);
+        }
+
+        protected virtual string Execute(string soapAction, string message, string soapHeader, string responseTag, params string[] soapNamespaces)
+        {
+            return Execute(soapAction, message, soapHeader, new[] { responseTag }, soapNamespaces);
+        }
+
+        protected virtual string Execute(string soapAction, string message, string soapHeader, string[] responseTag, params string[] soapNamespaces)
+        {
+            var request = WriteSoapEnvelope(message, soapAction, soapHeader, soapNamespaces);
+
+            RemoteCertificateValidationCallback validation = null;
+            var naoValidarCertificado = !ValidarCertificadoServidor();
+
+            if (naoValidarCertificado)
+            {
+                validation = ServicePointManager.ServerCertificateValidationCallback;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+            }
+
+            string soapResponse;
+
+            try
+            {
+                lock (serviceLock)
+                {
+                    var response = Channel.Request(request);
+                    Guard.Against<ACBrDFeException>(response == null, "Nenhum retorno do webservice.");
+                    var reader = response.GetReaderAtBodyContents();
+                    soapResponse = reader.ReadOuterXml();
+                }
+            }
+            finally
+            {
+                if (naoValidarCertificado)
+                    ServicePointManager.ServerCertificateValidationCallback = validation;
+            }
+
+            var xmlDocument = XDocument.Parse(soapResponse);
+            var retorno = TratarRetorno(xmlDocument, responseTag);
+            if (retorno.IsValidXml()) return retorno;
+
+            throw new ApplicationException(retorno);
+        }
+
+        protected virtual bool ValidarCertificadoServidor()
+        {
+            return true;
+        }
+
+        protected abstract Message WriteSoapEnvelope(string message, string soapAction, string soapHeader, string[] soapNamespaces);
+
+        protected abstract string TratarRetorno(XDocument xmlDocument, string[] responseTag);
+
         /// <summary>
         /// Salvar o arquivo xml no disco de acordo com as propriedades.
         /// </summary>
         /// <param name="conteudoArquivo"></param>
         /// <param name="nomeArquivo"></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        protected void GravarSoap(string conteudoArquivo, string nomeArquivo)
+        protected virtual void GravarSoap(string conteudoArquivo, string nomeArquivo)
         {
             if (Provider.Configuracoes.WebServices.Salvar == false) return;
 
@@ -159,14 +247,14 @@ namespace ACBr.Net.NFSe.Providers
         protected override void BeforeSendDFeRequest(string message)
         {
             EnvelopeEnvio = message;
-            GravarSoap(message, $"{DateTime.Now:yyyyMMddssfff}_{ArquivoEnvio}_soap_env.xml");
+            GravarSoap(EnvelopeEnvio, $"{DateTime.Now:yyyyMMddssfff}_{PrefixoEnvio}_soap_env.xml");
         }
 
         /// <inheritdoc />
         protected override void AfterReceiveDFeReply(string message)
         {
             EnvelopeRetorno = message;
-            GravarSoap(message, $"{DateTime.Now:yyyyMMddssfff}_{ArquivoResposta}_soap_ret.xml");
+            GravarSoap(EnvelopeRetorno, $"{DateTime.Now:yyyyMMddssfff}_{PrefixoResposta}_soap_ret.xml");
         }
 
         #endregion Methods

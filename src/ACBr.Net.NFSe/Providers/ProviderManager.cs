@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 01-31-2016
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 06-01-2018
 // ***********************************************************************
 // <copyright file="ProviderManager.cs" company="ACBr.Net">
@@ -32,22 +32,13 @@
 using ACBr.Net.Core;
 using ACBr.Net.Core.Extensions;
 using ACBr.Net.NFSe.Configuracao;
+using ACBr.Net.NFSe.Providers.Sigiss;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using ACBr.Net.NFSe.Providers.Abaco;
-using ACBr.Net.NFSe.Providers.BeloHorizonte;
-using ACBr.Net.NFSe.Providers.Coplan;
-using ACBr.Net.NFSe.Providers.DSF;
-using ACBr.Net.NFSe.Providers.GovDigital;
-using ACBr.Net.NFSe.Providers.NotaCarioca;
-using ACBr.Net.NFSe.Providers.PortoAlegre;
-using ACBr.Net.NFSe.Providers.SaoPaulo;
-using ACBr.Net.NFSe.Providers.WebISS;
-using ACBr.Net.NFSe.Providers.WebISS2;
 
 namespace ACBr.Net.NFSe.Providers
 {
@@ -64,21 +55,27 @@ namespace ACBr.Net.NFSe.Providers
             Providers = new Dictionary<NFSeProvider, Type>
             {
                 {NFSeProvider.Abaco, typeof(ProviderAbaco)},
-                {NFSeProvider.BeloHorizonte, typeof(ProviderBeloHorizonte)},
+                {NFSeProvider.BHISS, typeof(ProviderBHISS)},
                 {NFSeProvider.Betha, typeof(ProviderBetha)},
                 {NFSeProvider.Betha2, typeof(ProviderBetha2)},
                 {NFSeProvider.Coplan, typeof(ProviderCoplan)},
+                {NFSeProvider.DBSeller, typeof(ProviderDBSeller)},
                 {NFSeProvider.DSF, typeof(ProviderDSF)},
+                {NFSeProvider.Equiplano, typeof(ProviderEquiplano)},
+                {NFSeProvider.Fiorilli, typeof(ProviderFiorilli)},
                 {NFSeProvider.FissLex, typeof(ProviderFissLex)},
                 {NFSeProvider.Ginfes, typeof(ProviderGinfes)},
-                {NFSeProvider.GovDigital, typeof(ProviderGovDigital)},
+                {NFSeProvider.ISSNet, typeof(ProviderISSNet)},
+                {NFSeProvider.NFeCidades, typeof(ProviderNFeCidades)},
                 {NFSeProvider.NotaCarioca, typeof(ProviderNotaCarioca)},
-                {NFSeProvider.PortoAlegre, typeof(ProviderPortoAlegre)},
+                {NFSeProvider.Pronim2, typeof(ProviderPronim2)},
                 {NFSeProvider.SaoPaulo, typeof(ProviderSaoPaulo)},
                 {NFSeProvider.SmarAPDABRASF, typeof(ProviderSmarAPDABRASF)},
                 {NFSeProvider.Vitoria, typeof(ProviderVitoria)},
                 {NFSeProvider.WebIss, typeof(ProviderWebIss)},
-                {NFSeProvider.WebIss2, typeof(ProviderWebIss2)}
+                {NFSeProvider.WebIss2, typeof(ProviderWebIss2)},
+                {NFSeProvider.Sigiss, typeof(ProviderSigiss)},
+                {NFSeProvider.Conam, typeof(ProviderCONAM)},
             };
 
             Load();
@@ -126,7 +123,6 @@ namespace ACBr.Net.NFSe.Providers
         /// Salva o arquivo de cidades.
         /// </summary>
         /// <param name="stream">O stream.</param>
-        /// <param name="compress"></param>
         public static void Save(Stream stream)
         {
             var formatter = new DataContractSerializer(typeof(MunicipiosNFSe));
@@ -209,7 +205,9 @@ namespace ACBr.Net.NFSe.Providers
         {
             return typeof(ProviderBase).IsAssignableFrom(providerType) ||
                    typeof(ProviderABRASF).IsAssignableFrom(providerType) ||
-                   typeof(ProviderABRASF2).IsAssignableFrom(providerType);
+                   typeof(ProviderABRASF201).IsAssignableFrom(providerType) ||
+                   typeof(ProviderABRASF202).IsAssignableFrom(providerType) ||
+                   typeof(ProviderABRASF204).IsAssignableFrom(providerType);
         }
 
         #endregion Private

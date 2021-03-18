@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 01-13-2017
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 07-11-2018
 // ***********************************************************************
 // <copyright file="ProviderWebIss.cs" company="ACBr.Net">
@@ -33,9 +33,8 @@ using System;
 using ACBr.Net.NFSe.Configuracao;
 using ACBr.Net.NFSe.Nota;
 
-namespace ACBr.Net.NFSe.Providers.WebISS
+namespace ACBr.Net.NFSe.Providers
 {
-    // ReSharper disable once InconsistentNaming
     internal sealed class ProviderWebIss : ProviderABRASF
     {
         #region Constructors
@@ -49,12 +48,12 @@ namespace ACBr.Net.NFSe.Providers.WebISS
 
         #region Methods
 
-        public override RetornoWebservice EnviarSincrono(int lote, NotaFiscalCollection notas)
+        protected override void PrepararEnviarSincrono(RetornoEnviar retornoWebservice, NotaServicoCollection notas)
         {
             throw new NotImplementedException("Função não implementada/suportada neste Provedor !");
         }
 
-        protected override IABRASFClient GetClient(TipoUrl tipo)
+        protected override IServiceClient GetClient(TipoUrl tipo)
         {
             return new WebIssServiceClient(this, tipo);
         }
@@ -72,9 +71,9 @@ namespace ACBr.Net.NFSe.Providers.WebISS
                 case TipoUrl.EnviarSincrono: return "servico_gerar_nfse_envio.xsd";
                 case TipoUrl.ConsultarSituacao: return "servico_consultar_situacao_lote_rps_envio.xsd";
                 case TipoUrl.ConsultarLoteRps: return "servico_consultar_lote_rps_envio.xsd";
-                case TipoUrl.ConsultaNFSeRps: return "servico_consultar_nfse_rps_envio.xsd";
-                case TipoUrl.ConsultaNFSe: return "servico_consultar_nfse_envio.xsd";
-                case TipoUrl.CancelaNFSe: return "servico_cancelar_nfse_envio.xsd";
+                case TipoUrl.ConsultarNFSeRps: return "servico_consultar_nfse_rps_envio.xsd";
+                case TipoUrl.ConsultarNFSe: return "servico_consultar_nfse_envio.xsd";
+                case TipoUrl.CancelarNFSe: return "servico_cancelar_nfse_envio.xsd";
                 default: throw new ArgumentOutOfRangeException(nameof(tipo), tipo, @"Valor incorreto ou serviço não suportado.");
             }
         }

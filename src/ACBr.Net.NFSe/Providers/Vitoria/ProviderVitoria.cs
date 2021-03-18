@@ -1,9 +1,9 @@
 ﻿// ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 21-01-2020
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 21-01-2020
 // ***********************************************************************
 // <copyright file="ProviderVitoria.cs" company="ACBr.Net">
@@ -33,7 +33,7 @@ using ACBr.Net.NFSe.Configuracao;
 
 namespace ACBr.Net.NFSe.Providers
 {
-    internal sealed class ProviderVitoria : ProviderABRASF2
+    internal sealed class ProviderVitoria : ProviderABRASF201
     {
         #region Constructors
 
@@ -48,24 +48,9 @@ namespace ACBr.Net.NFSe.Providers
 
         #region Protected Methods
 
-        protected override IABRASF2Client GetClient(TipoUrl tipo)
+        protected override IServiceClient GetClient(TipoUrl tipo)
         {
             return new VitoriaServiceClient(this, tipo, Certificado);
-        }
-
-        protected override string GetNamespace()
-        {
-            return "xmlns=\"http://www.abrasf.org.br/nfse.xsd\"";
-        }
-
-        protected override string GetSchema(TipoUrl tipo)
-        {
-            return "nfse.xsd";
-        }
-
-        protected override string GerarCabecalho()
-        {
-            return $"<cabecalho versao=\"2.01\" xmlns=\"http://www.abrasf.org.br/nfse.xsd\"><versaoDados>2.01</versaoDados></cabecalho>";
         }
 
         #endregion Protected Methods

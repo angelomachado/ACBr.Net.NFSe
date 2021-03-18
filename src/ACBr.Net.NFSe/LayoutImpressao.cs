@@ -1,9 +1,9 @@
 // ***********************************************************************
 // Assembly         : ACBr.Net.NFSe
-// Author           : RFTD
+// Author           : Rafael Dias
 // Created          : 12-26-2017
 //
-// Last Modified By : RFTD
+// Last Modified By : Rafael Dias
 // Last Modified On : 12-26-2017
 // ***********************************************************************
 // <copyright file="LayoutImpressao.cs" company="ACBr.Net">
@@ -34,6 +34,7 @@ namespace ACBr.Net.NFSe
     public enum LayoutImpressao
     {
         ABRASF,
+        ABRASF2,
         DSF,
         Ginfes
     }

@@ -82,6 +82,12 @@
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.cmbUf = new System.Windows.Forms.ComboBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.nudIdEntidade = new System.Windows.Forms.NumericUpDown();
+            this.label26 = new System.Windows.Forms.Label();
+            this.txtHCancelaNFSeLote = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.txtPCancelaNFSeLote = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -89,6 +95,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTamIM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCodSiafi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCodIBGE)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIdEntidade)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSalvar
@@ -124,13 +131,13 @@
             // 
             this.txtMunicipio.Location = new System.Drawing.Point(12, 25);
             this.txtMunicipio.Name = "txtMunicipio";
-            this.txtMunicipio.Size = new System.Drawing.Size(279, 20);
+            this.txtMunicipio.Size = new System.Drawing.Size(223, 20);
             this.txtMunicipio.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(294, 9);
+            this.label2.Location = new System.Drawing.Point(238, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(21, 13);
             this.label2.TabIndex = 5;
@@ -149,6 +156,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label26);
+            this.tabPage1.Controls.Add(this.txtHCancelaNFSeLote);
             this.tabPage1.Controls.Add(this.label11);
             this.tabPage1.Controls.Add(this.txtHConsultarSequencialRps);
             this.tabPage1.Controls.Add(this.label9);
@@ -194,7 +203,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 159);
+            this.label9.Location = new System.Drawing.Point(337, 159);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(80, 13);
             this.label9.TabIndex = 19;
@@ -202,7 +211,7 @@
             // 
             // txtHSubstituirNFSe
             // 
-            this.txtHSubstituirNFSe.Location = new System.Drawing.Point(6, 175);
+            this.txtHSubstituirNFSe.Location = new System.Drawing.Point(340, 175);
             this.txtHSubstituirNFSe.Name = "txtHSubstituirNFSe";
             this.txtHSubstituirNFSe.Size = new System.Drawing.Size(328, 20);
             this.txtHSubstituirNFSe.TabIndex = 18;
@@ -210,7 +219,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 120);
+            this.label10.Location = new System.Drawing.Point(3, 159);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(96, 13);
             this.label10.TabIndex = 17;
@@ -218,7 +227,7 @@
             // 
             // txtHConsultarSituacao
             // 
-            this.txtHConsultarSituacao.Location = new System.Drawing.Point(6, 136);
+            this.txtHConsultarSituacao.Location = new System.Drawing.Point(6, 175);
             this.txtHConsultarSituacao.Name = "txtHConsultarSituacao";
             this.txtHConsultarSituacao.Size = new System.Drawing.Size(328, 20);
             this.txtHConsultarSituacao.TabIndex = 16;
@@ -274,7 +283,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 81);
+            this.label5.Location = new System.Drawing.Point(3, 120);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 13);
             this.label5.TabIndex = 9;
@@ -282,7 +291,7 @@
             // 
             // txtHConsultaNFSeRps
             // 
-            this.txtHConsultaNFSeRps.Location = new System.Drawing.Point(6, 97);
+            this.txtHConsultaNFSeRps.Location = new System.Drawing.Point(6, 136);
             this.txtHConsultaNFSeRps.Name = "txtHConsultaNFSeRps";
             this.txtHConsultaNFSeRps.Size = new System.Drawing.Size(328, 20);
             this.txtHConsultaNFSeRps.TabIndex = 8;
@@ -321,6 +330,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label27);
+            this.tabPage2.Controls.Add(this.txtPCancelaNFSeLote);
             this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Controls.Add(this.txtPConsultarSequencialRps);
             this.tabPage2.Controls.Add(this.label13);
@@ -366,7 +377,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 159);
+            this.label13.Location = new System.Drawing.Point(337, 159);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(80, 13);
             this.label13.TabIndex = 37;
@@ -374,7 +385,7 @@
             // 
             // txtPSubstituirNFSe
             // 
-            this.txtPSubstituirNFSe.Location = new System.Drawing.Point(6, 175);
+            this.txtPSubstituirNFSe.Location = new System.Drawing.Point(340, 175);
             this.txtPSubstituirNFSe.Name = "txtPSubstituirNFSe";
             this.txtPSubstituirNFSe.Size = new System.Drawing.Size(328, 20);
             this.txtPSubstituirNFSe.TabIndex = 36;
@@ -382,7 +393,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(3, 120);
+            this.label14.Location = new System.Drawing.Point(3, 159);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(96, 13);
             this.label14.TabIndex = 35;
@@ -390,7 +401,7 @@
             // 
             // txtPConsultarSituacao
             // 
-            this.txtPConsultarSituacao.Location = new System.Drawing.Point(6, 136);
+            this.txtPConsultarSituacao.Location = new System.Drawing.Point(6, 175);
             this.txtPConsultarSituacao.Name = "txtPConsultarSituacao";
             this.txtPConsultarSituacao.Size = new System.Drawing.Size(328, 20);
             this.txtPConsultarSituacao.TabIndex = 34;
@@ -446,7 +457,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(3, 81);
+            this.label18.Location = new System.Drawing.Point(3, 120);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(100, 13);
             this.label18.TabIndex = 27;
@@ -454,7 +465,7 @@
             // 
             // txtPConsultaNFSeRps
             // 
-            this.txtPConsultaNFSeRps.Location = new System.Drawing.Point(6, 97);
+            this.txtPConsultaNFSeRps.Location = new System.Drawing.Point(6, 136);
             this.txtPConsultaNFSeRps.Name = "txtPConsultaNFSeRps";
             this.txtPConsultaNFSeRps.Size = new System.Drawing.Size(328, 20);
             this.txtPConsultaNFSeRps.TabIndex = 26;
@@ -503,26 +514,26 @@
             // 
             // nudTamIM
             // 
-            this.nudTamIM.Location = new System.Drawing.Point(360, 26);
+            this.nudTamIM.Location = new System.Drawing.Point(303, 25);
             this.nudTamIM.Name = "nudTamIM";
             this.nudTamIM.Size = new System.Drawing.Size(51, 20);
             this.nudTamIM.TabIndex = 8;
             // 
             // nudCodSiafi
             // 
-            this.nudCodSiafi.Location = new System.Drawing.Point(499, 26);
+            this.nudCodSiafi.Location = new System.Drawing.Point(442, 25);
             this.nudCodSiafi.Maximum = new decimal(new int[] {
             9999999,
             0,
             0,
             0});
             this.nudCodSiafi.Name = "nudCodSiafi";
-            this.nudCodSiafi.Size = new System.Drawing.Size(76, 20);
+            this.nudCodSiafi.Size = new System.Drawing.Size(63, 20);
             this.nudCodSiafi.TabIndex = 10;
             // 
             // nudCodIBGE
             // 
-            this.nudCodIBGE.Location = new System.Drawing.Point(417, 26);
+            this.nudCodIBGE.Location = new System.Drawing.Point(360, 25);
             this.nudCodIBGE.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -544,7 +555,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(357, 9);
+            this.label21.Location = new System.Drawing.Point(300, 8);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(46, 13);
             this.label21.TabIndex = 13;
@@ -553,7 +564,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(417, 9);
+            this.label22.Location = new System.Drawing.Point(360, 8);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(57, 13);
             this.label22.TabIndex = 14;
@@ -562,7 +573,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(496, 9);
+            this.label23.Location = new System.Drawing.Point(439, 8);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(52, 13);
             this.label23.TabIndex = 15;
@@ -587,16 +598,71 @@
             "Porto Alegre",
             "São Paulo",
             "WebISS"});
-            this.cmbUf.Location = new System.Drawing.Point(297, 25);
+            this.cmbUf.Location = new System.Drawing.Point(241, 25);
             this.cmbUf.Name = "cmbUf";
             this.cmbUf.Size = new System.Drawing.Size(56, 21);
             this.cmbUf.TabIndex = 17;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(508, 8);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(58, 13);
+            this.label25.TabIndex = 19;
+            this.label25.Text = "IdEntidade";
+            // 
+            // nudIdEntidade
+            // 
+            this.nudIdEntidade.Location = new System.Drawing.Point(511, 25);
+            this.nudIdEntidade.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.nudIdEntidade.Name = "nudIdEntidade";
+            this.nudIdEntidade.Size = new System.Drawing.Size(64, 20);
+            this.nudIdEntidade.TabIndex = 18;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(3, 81);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(100, 13);
+            this.label26.TabIndex = 23;
+            this.label26.Text = "Cancela NFSe Lote";
+            // 
+            // txtHCancelaNFSeLote
+            // 
+            this.txtHCancelaNFSeLote.Location = new System.Drawing.Point(6, 97);
+            this.txtHCancelaNFSeLote.Name = "txtHCancelaNFSeLote";
+            this.txtHCancelaNFSeLote.Size = new System.Drawing.Size(328, 20);
+            this.txtHCancelaNFSeLote.TabIndex = 22;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(3, 81);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(100, 13);
+            this.label27.TabIndex = 41;
+            this.label27.Text = "Cancela NFSe Lote";
+            // 
+            // txtPCancelaNFSeLote
+            // 
+            this.txtPCancelaNFSeLote.Location = new System.Drawing.Point(6, 97);
+            this.txtPCancelaNFSeLote.Name = "txtPCancelaNFSeLote";
+            this.txtPCancelaNFSeLote.Size = new System.Drawing.Size(328, 20);
+            this.txtPCancelaNFSeLote.TabIndex = 40;
             // 
             // FormEdtMunicipio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(714, 345);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.nudIdEntidade);
             this.Controls.Add(this.cmbUf);
             this.Controls.Add(this.label24);
             this.Controls.Add(this.label23);
@@ -627,6 +693,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTamIM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCodSiafi)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCodIBGE)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIdEntidade)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -688,5 +755,11 @@
 		private System.Windows.Forms.Label label23;
 		private System.Windows.Forms.Label label24;
         private System.Windows.Forms.ComboBox cmbUf;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.NumericUpDown nudIdEntidade;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox txtHCancelaNFSeLote;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox txtPCancelaNFSeLote;
     }
 }
